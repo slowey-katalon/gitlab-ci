@@ -1,0 +1,16 @@
+image: 'katalonstudio/katalon:8.6.10'  # Use the latest Katalon Docker image (you can specify another version if needed)
+
+services:
+  - docker:dind  # Required for running Docker-in-Docker
+
+variables:
+  KATALON_PROJECT_DIR: $CI_PROJECT_DIR  # The directory where your Katalon Studio project is located
+  KATALON_API_KEY: 54f5ba49-9822-4ca5-bf55-29ee78693054  # Set this in your GitLab CI/CD environment variables
+
+stages:
+  - test  # Define the stages of the pipeline
+
+test_job:
+  stage: test
+  script:
+    - katalonc.sh -noSplash -runMode=console -projectPath="$CI_PROJECT_DIR" -apiKey="$KATALON_API_KEY" -browserType=Chrome -retry=0 -statusDelay=10 -testSuitePath="New Test Suite"
